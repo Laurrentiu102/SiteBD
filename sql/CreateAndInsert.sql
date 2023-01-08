@@ -147,13 +147,13 @@ FROM Persoana a, Contract_j c, Persoana b
 WHERE a.nume = 'John Doe' AND
  c.id_avocat = a.id_p AND
  b.id_p = c.id_client;
- 
- CREATE EVENT cookie_delete_hourly
+
+CREATE EVENT cookie_delete_hourly
     ON SCHEDULE
-      EVERY 1 HOUR
+      EVERY 1 MINUTE
     COMMENT 'Sterge cookieuri mai vechi de o ora'
     DO
-      DELETE FROM cookies;
+DELETE FROM Cookies WHERE data<DATE_SUB(NOW(), INTERVAL 1 HOUR);
 
 DROP USER IF EXISTS 'SiteBD'@'localhost';
 
