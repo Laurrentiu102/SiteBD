@@ -14,10 +14,13 @@ public class paginaPrincipalaS extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             if(Cookies.checkCookieRememberMeAdded(request,response) || Cookies.checkCookieRememberEmail(request,response)){
-                if(Cookies.getJob(request).equals("avocat") || Cookies.getJob(request).equals("client") || Cookies.getJob(request).equals("angajat")){
+                if((Cookies.getJob(request).equals("avocat") || Cookies.getJob(request).equals("client") || Cookies.getJob(request).equals("angajat")) && SQL.checkAccountExists(Cookies.getEmail(request))){
                     request.setAttribute("email",Cookies.getEmail(request));
                     request.setAttribute("functie",Cookies.getJob(request));
                     request.getRequestDispatcher("/WEB-INF/paginaPrincipala/paginaPrincipala.jsp").forward(request,response);
+                }else{
+                    Cookies.deleteRememberMeCookie(response);
+                    response.sendRedirect("/"+request.getRequestURI().split("/")[1]+"/loginS");
                 }
                 return;
             }
